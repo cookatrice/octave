@@ -14,11 +14,15 @@ X_poly = zeros(numel(X), p);
 %               column of X contains the values of X to the p-th power.
 %
 % 
-
-
-
-
-
+% 3. polynomial regression
+m = size(X,1);
+for i=1:m
+    features = zeros(p,1);
+    for j=1:p
+        features(j) = X(i).^j;
+    end
+    X_poly(i,:) = features;
+end
 
 % =========================================================================
 
