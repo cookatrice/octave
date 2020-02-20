@@ -23,11 +23,24 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+steps = [0.01 0.03 0.1 0.3 1 3 10 30];
+stepsLength = length(steps);
+minErr = 10000;
 
-
-
-
-
+for c=1:stepsLength
+    for s=1:stepsLength
+        curC = steps(c);
+        curSigma = steps(s);
+        model = svmTrain(X, y, curC, @(x1, x2) gaussianKernel(x1, x2, curSigma));
+        predictions = svmPredict(model, Xval);
+        err = mean(double(predictions ~= yval));
+        if err < minErr
+            C = curC;
+            sigma = curSigma;
+            minErr = err;
+        end;
+    end
+end
 
 % =========================================================================
 
