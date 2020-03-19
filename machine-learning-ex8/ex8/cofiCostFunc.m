@@ -3,8 +3,7 @@ function [J, grad] = cofiCostFunc(params, Y, R, num_users, num_movies, ...
 %COFICOSTFUNC Collaborative filtering cost function
 %   [J, grad] = COFICOSTFUNC(params, Y, R, num_users, num_movies, ...
 %   num_features, lambda) returns the cost and gradient for the
-%   collaborative filtering problem.
-%
+%   collaborative filtering problem.  %
 
 % Unfold the U and W matrices from params
 X = reshape(params(1:num_movies*num_features), num_movies, num_features);
@@ -39,24 +38,21 @@ Theta_grad = zeros(size(Theta));
 %        Theta_grad - num_users x num_features matrix, containing the 
 %                     partial derivatives w.r.t. to each element of Theta
 %
+cost =0;
+cost = sum(sum(((((X*Theta').*R)-Y).^2)));
+cost = cost/2;
 
+c_regular = 0;
+c_regular = (lambda/2)*sum(sum(Theta.^2)) + (lambda/2)*sum(sum(X.^2));
 
+J = cost + c_regular;
 
+X_grad = ((((X*Theta').*R)-Y)*Theta);
+Theta_grad = ((((X*Theta').*R)-Y)'*X);
 
-
-
-
-
-
-
-
-
-
-
-
-
+X_grad = X_grad + lambda * X;
+Theta_grad = Theta_grad + lambda * Theta;
 % =============================================================
 
 grad = [X_grad(:); Theta_grad(:)];
-
 end
